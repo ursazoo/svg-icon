@@ -6,11 +6,6 @@ import { ref } from 'vue'
  * 
  * 这是一个基础的示例组件，用于展示Vue 3和Vite的基本功能。
  * 包含一个动态计数器和一些链接。
- * 
- * @example
- * ```vue
- * <HelloWorld msg="欢迎使用Vue 3" />
- * ```
  */
 
 interface Props {
