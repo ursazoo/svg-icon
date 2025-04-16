@@ -273,24 +273,53 @@ const generateComponentDoc = (filePath) => {
 // 主函数
 const main = async () => {
   try {
-    const stagedFiles = await getStagedFiles();
+    // 检查是否有 --force 参数
+    const forceGeneration = process.argv.includes('--force');
     
-    // 筛选出组件目录下的 .vue 文件
-    const componentFiles = stagedFiles.filter(file => 
-      file.startsWith('src/components/') && file.endsWith('.vue')
-    );
+    let componentFiles = [];
+    
+    if (forceGeneration) {
+      // 强制模式：处理 src/components 目录下的所有 .vue 文件
+      console.log('🔄 强制模式：处理所有组件文件');
+      const componentsDir = path.join(rootDir, 'src/components');
+      
+      const getAllFiles = (dir) => {
+        const files = fs.readdirSync(dir, { withFileTypes: true });
+        let vueFiles = [];
+        
+        for (const file of files) {
+          const fullPath = path.join(dir, file.name);
+          if (file.isDirectory()) {
+            vueFiles = vueFiles.concat(getAllFiles(fullPath));
+          } else if (file.name.endsWith('.vue')) {
+            vueFiles.push(fullPath);
+          }
+        }
+        
+        return vueFiles;
+      };
+      
+      componentFiles = getAllFiles(componentsDir);
+    } else {
+      // 正常模式：只处理暂存区中的文件
+      const stagedFiles = await getStagedFiles();
+      
+      // 筛选出组件目录下的 .vue 文件
+      componentFiles = stagedFiles
+        .filter(file => file.startsWith('src/components/') && file.endsWith('.vue'))
+        .map(file => path.join(rootDir, file));
+    }
     
     if (componentFiles.length === 0) {
-      console.log('📝 没有组件文件被修改，跳过文档生成');
+      console.log('📝 没有组件文件被' + (forceGeneration ? '找到' : '修改') + '，跳过文档生成');
       process.exit(0);
     }
     
-    console.log(`🔍 检测到 ${componentFiles.length} 个组件文件变更`);
+    console.log(`🔍 检测到 ${componentFiles.length} 个组件文件` + (forceGeneration ? '' : '变更'));
     
     // 为每个组件文件生成文档
     let success = true;
-    for (const file of componentFiles) {
-      const fullPath = path.join(rootDir, file);
+    for (const fullPath of componentFiles) {
       if (fs.existsSync(fullPath)) {
         const result = generateComponentDoc(fullPath);
         success = success && result;
