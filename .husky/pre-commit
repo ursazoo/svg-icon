@@ -1,4 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# 运行文档生成脚本
+node scripts/generateComponentDocs.js
+
+# 运行 lint-staged 和测试
 npx lint-staged && npm run test:run
