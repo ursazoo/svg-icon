@@ -25,7 +25,7 @@ const handleClick = () => {
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .header {
     background-color: #f0f0f0;
 }
