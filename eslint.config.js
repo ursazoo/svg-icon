@@ -2,6 +2,8 @@ import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import eslintPluginVue from 'eslint-plugin-vue';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
 
 // 获取当前文件的目录
 const __filename = fileURLToPath(import.meta.url);
@@ -14,6 +16,13 @@ const compat = new FlatCompat({
 
 export default [
   js.configs.recommended,
+  {
+    // 直接声明插件
+    plugins: {
+      vue: eslintPluginVue,
+      '@typescript-eslint': typescriptEslint
+    }
+  },
   ...compat.config({
     extends: [
       'plugin:vue/vue3-recommended',
@@ -26,7 +35,6 @@ export default [
       parser: '@typescript-eslint/parser',
       sourceType: 'module'
     },
-    plugins: ['vue', '@typescript-eslint'],
     rules: {
       'vue/multi-word-component-names': 'off',
       'vue/no-v-html': 'off',

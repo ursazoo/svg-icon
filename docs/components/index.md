@@ -13,6 +13,7 @@ SVG 图标组件库提供了以下组件：
 ## 示例组件
 
 - [HelloWorld](./HelloWorld.md) - HelloWorld 组件 这是一个基础的示例组件，用于展示Vue 3和Vite的基本功能。 包含一个动态计数器和一些链接。
+- [Test](./Test.md)
 
 ## 组件设计原则
 
