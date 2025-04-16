@@ -3,6 +3,7 @@ import eslintPluginVue from 'eslint-plugin-vue';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import vueParser from 'vue-eslint-parser';
+import eslintConfigPrettier from 'eslint-config-prettier';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -10,14 +11,35 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Vue3 推荐配置
-const vue3RecommendedRules = {
-  ...eslintPluginVue.configs['vue3-recommended'].rules
+// 直接定义 Vue 和 TypeScript 相关规则
+const vueRules = {
+  'vue/multi-word-component-names': 'off',
+  'vue/no-v-html': 'off',
+  'vue/require-default-prop': 'off',
+  'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+  'vue/html-closing-bracket-newline': ['error', {
+    'singleline': 'never',
+    'multiline': 'always'
+  }],
+  'vue/html-indent': ['error', 2],
+  'vue/max-attributes-per-line': ['error', {
+    'singleline': 3,
+    'multiline': 1
+  }],
+  'vue/no-unused-components': 'error',
+  'vue/no-unused-vars': 'error',
+  'vue/no-multiple-template-root': 'off'
 };
 
-// TypeScript 推荐配置
-const tsRecommendedRules = {
-  ...tseslint.configs.recommended.rules
+const tsRules = {
+  '@typescript-eslint/no-explicit-any': 'warn',
+  '@typescript-eslint/no-unused-vars': ['error', { 'ignoreRestSiblings': true }],
+  '@typescript-eslint/explicit-function-return-type': 'off',
+  '@typescript-eslint/explicit-module-boundary-types': 'off',
+  '@typescript-eslint/no-empty-function': 'warn',
+  '@typescript-eslint/no-non-null-assertion': 'off',
+  '@typescript-eslint/ban-ts-comment': 'warn',
+  '@typescript-eslint/type-annotation-spacing': 'error'
 };
 
 export default [
@@ -44,13 +66,8 @@ export default [
     },
     // 合并规则
     rules: {
-      ...vue3RecommendedRules,
-      ...tsRecommendedRules,
-      'vue/multi-word-component-names': 'off',
-      'vue/no-v-html': 'off',
-      'vue/require-default-prop': 'off',
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': ['error', { 'ignoreRestSiblings': true }],
+      ...vueRules,
+      ...tsRules,
       'quotes': ['error', 'single'],
       'semi': ['error', 'always']
     }
@@ -59,5 +76,8 @@ export default [
   // 文件忽略配置
   {
     ignores: ['node_modules/**', 'dist/**', 'public/**', 'coverage/**', '*.d.ts']
-  }
+  },
+  
+  // Prettier 配置（必须放在最后以覆盖之前的规则）
+  eslintConfigPrettier
 ]; 
