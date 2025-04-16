@@ -18,7 +18,7 @@ export default {
         'ci'        // CI 相关变更
       ]
     ],
-    'type-case': [2, 'always', 'lower'],
+    'type-case': [2, 'always', 'lowercase'],
     'type-empty': [2, 'never'],
     'scope-empty': [0, 'never'],
     'subject-empty': [2, 'never'],
