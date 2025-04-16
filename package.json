@@ -20,7 +20,7 @@
   },
   "lint-staged": {
     "*.{vue,js,ts,jsx,tsx}": [
-      "eslint --fix --config eslint.config.js",
+      "eslint --fix",
       "prettier --write"
     ],
     "*.{css,scss}": [

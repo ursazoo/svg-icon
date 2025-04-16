@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     title: {
@@ -15,5 +15,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:title']);
+
+onMounted(() => {
+    console.log(props.title);
+});
 
 </script>
