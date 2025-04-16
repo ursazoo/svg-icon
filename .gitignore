@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# vscode
+.vscode/
+
+# 备份文件
+*.backup
