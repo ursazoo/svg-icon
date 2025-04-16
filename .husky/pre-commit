@@ -1,7 +1,8 @@
 #!/usr/bin/env sh
 
-# 运行文档生成脚本
-node scripts/generateComponentDocs.js
+# 使用MCP工具生成组件文档
+# Cursor会自动处理这个工具
+# 无需显式调用脚本
 
 # 运行 lint-staged 和测试
 npx lint-staged && npm run test:run

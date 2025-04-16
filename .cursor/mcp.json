@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "svg-icon-docs-generator": {
+      "command": "node",
+      "args": ["scripts/mcp-docs-generator.js"],
+      "env": {}
+    }
+  }
+} 

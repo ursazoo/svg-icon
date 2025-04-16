@@ -13,7 +13,7 @@
     "prepare": "husky",
     "lint": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{vue,ts,js,scss}\"",
-    "docs:generate": "node scripts/generateComponentDocs.js",
+    "docs:generate": "node scripts/mcp-docs-generator.js",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
