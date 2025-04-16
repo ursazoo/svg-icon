@@ -28,6 +28,16 @@ const getStagedFiles = () => {
   });
 };
 
+// 从JSDoc中清除多余内容
+const cleanJSDocText = (text) => {
+  return text
+    .replace(/\s*\*\s*/g, ' ')
+    .replace(/@example[\s\S]*?(?=@|$)/g, '')
+    .replace(/@.*$/gm, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
 // 解析组件文件并生成文档
 const generateComponentDoc = (filePath) => {
   try {
@@ -45,14 +55,7 @@ const generateComponentDoc = (filePath) => {
     let description = '';
     
     if (descriptionMatch && descriptionMatch[1]) {
-      const descText = descriptionMatch[1]
-        .replace(/\s*\*\s*/g, ' ')
-        .replace(/@example[\s\S]*?```/g, '')
-        .replace(/@.*$/gm, '')
-        .replace(/\s+/g, ' ')
-        .trim();
-      
-      description = descText;
+      description = cleanJSDocText(descriptionMatch[1]);
     }
     
     // 手动提取 Props
@@ -65,52 +68,45 @@ const generateComponentDoc = (filePath) => {
       const propsInterface = propsInterfaceMatch[1];
       
       // 提取每个属性的注释和定义
-      const propBlocks = propsInterface.split(/\n\s*\n/);
+      const propBlocks = propsInterface.split(/\n\s*\n/).filter(block => block.trim());
       
       for (const block of propBlocks) {
-        if (block.trim()) {
-          // 提取属性注释
-          const commentMatch = block.match(/\/\*\*\s*([\s\S]*?)\s*\*\//);
-          let propComment = '';
+        // 提取属性注释
+        const commentMatch = block.match(/\/\*\*\s*([\s\S]*?)\s*\*\//);
+        let propComment = '';
+        
+        if (commentMatch && commentMatch[1]) {
+          propComment = cleanJSDocText(commentMatch[1]);
+        }
+        
+        // 提取属性定义
+        const propDefMatch = block.match(/([a-zA-Z0-9_]+)(\??):\s*([^;\n]*)/);
+        
+        if (propDefMatch) {
+          const propName = propDefMatch[1];
+          const isOptional = propDefMatch[2] === '?';
+          const propType = propDefMatch[3].trim();
           
-          if (commentMatch && commentMatch[1]) {
-            propComment = commentMatch[1]
-              .replace(/\s*\*\s*/g, ' ')
-              .replace(/@default.*$/gm, '')
-              .replace(/@.*$/gm, '')
-              .replace(/\s+/g, ' ')
-              .trim();
-          }
+          // 查找默认值
+          const withDefaultsMatch = scriptContent.match(/withDefaults\s*\(\s*defineProps[\s\S]*?,\s*{([^}]*)}\s*\)/);
+          let defaultValue = '';
           
-          // 提取属性定义
-          const propDefMatch = block.match(/([a-zA-Z0-9_]+)(\??):\s*([^;\n]*)/);
-          
-          if (propDefMatch) {
-            const propName = propDefMatch[1];
-            const isOptional = propDefMatch[2] === '?';
-            const propType = propDefMatch[3].trim();
+          if (withDefaultsMatch && withDefaultsMatch[1]) {
+            const defaultsBlock = withDefaultsMatch[1];
+            const defaultMatch = defaultsBlock.match(new RegExp(`${propName}:\\s*['"]?([^'",}]*)['"]?`));
             
-            // 查找默认值
-            const withDefaultsMatch = scriptContent.match(/withDefaults\s*\(\s*defineProps[\s\S]*?,\s*{([^}]*)}\s*\)/);
-            let defaultValue = '';
-            
-            if (withDefaultsMatch && withDefaultsMatch[1]) {
-              const defaultsBlock = withDefaultsMatch[1];
-              const defaultMatch = defaultsBlock.match(new RegExp(`${propName}:\\s*['"]?([^'",}]*)['"]?`));
-              
-              if (defaultMatch) {
-                defaultValue = defaultMatch[1].trim();
-              }
+            if (defaultMatch) {
+              defaultValue = defaultMatch[1].trim();
             }
-            
-            props.push({
-              name: propName,
-              type: propType,
-              required: !isOptional,
-              description: propComment,
-              default: defaultValue
-            });
           }
+          
+          props.push({
+            name: propName,
+            type: propType,
+            required: !isOptional,
+            description: propComment,
+            default: defaultValue
+          });
         }
       }
     }

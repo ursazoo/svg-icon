@@ -1,12 +1,32 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-defineProps<{ msg: string }>()
+/**
+ * HelloWorld 组件
+ * 
+ * 这是一个基础的示例组件，用于展示Vue 3和Vite的基本功能。
+ * 包含一个动态计数器和一些链接。
+ * 
+ * @example
+ * ```vue
+ * <HelloWorld msg="欢迎使用Vue 3" />
+ * ```
+ */
+
+interface Props {
+  /**
+   * 要显示的消息文本
+   */
+  msg: string;
+}
+
+defineProps<Props>()
 
 const count = ref(0)
 </script>
 
 <template>
+  <h1>你好！</h1>
   <h1>{{ msg }}</h1>
 
   <div class="card">

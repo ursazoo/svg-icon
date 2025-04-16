@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
 # 运行文档生成脚本
 node scripts/generateComponentDocs.js

@@ -12,7 +12,11 @@
     "test:coverage": "vitest run --coverage",
     "prepare": "husky",
     "lint": "eslint . --fix",
-    "format": "prettier --write \"src/**/*.{vue,ts,js,scss}\""
+    "format": "prettier --write \"src/**/*.{vue,ts,js,scss}\"",
+    "docs:generate": "node scripts/generateComponentDocs.js",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "lint-staged": {
     "*.{vue,js,ts,jsx,tsx}": [
@@ -46,6 +50,7 @@
     "sass": "^1.86.3",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
+    "vitepress": "^1.6.3",
     "vitest": "^3.1.1",
     "vue-eslint-parser": "^10.1.3",
     "vue-tsc": "^2.2.4"
