@@ -13,7 +13,7 @@
 ```vue
 <template>
   <div class="header">
-          <h1 @click="handleClick">{{ title }}</h1>
+          <h1 @click="handleClick">{{ title || '默认的title' }}</h1>
       </div>
 </template>
 ```
