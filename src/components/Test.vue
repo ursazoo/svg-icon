@@ -19,7 +19,7 @@ const emit = defineEmits(['update:title']);
 onMounted(() => {
   console.log(props.title);
   setTimeout(() => {
-    emit('update:title', 'New New Title');
+    emit('update:title', 'New New Title Title');
   }, 1000);
 });
 </script>
