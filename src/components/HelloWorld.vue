@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 
 /**
- * HelloWorld 组件
+ * HelloWorld 测试组件
  * 
  * 这是一个基础的示例组件，用于展示Vue 3和Vite的基本功能。
  * 包含一个动态计数器和一些链接。
